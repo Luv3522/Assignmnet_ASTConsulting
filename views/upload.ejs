@@ -1,0 +1,16 @@
+<h1>Upload Image</h1>
+<form action="/image/upload" method="post" enctype="multipart/form-data">
+    <section>
+        <label for="image">Choose Image</label>
+        <input id="image" name="image" type="file" autocomplete="image" required autofocus>
+    </section>
+    <section>
+        <label for="title">Title</label>
+        <input id="title" name="title" type="text" autocomplete="title" required autofocus>
+    </section>
+    <section>
+        <label for="description">Description</label>
+        <input id="description" name="description" type="text" autocomplete="description" required>
+    </section>
+    <button type="submit">Log in</button>
+</form>
