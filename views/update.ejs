@@ -1,12 +1,12 @@
-<h1>Upload Image</h1>
-<form action="/image/upload" method="post" enctype="multipart/form-data">
-    <section>
+<h1>Update Image</h1>
+<form action="/image/update" method="post" enctype="multipart/form-data">
+    <!-- <section>
         <label for="image">Choose Image</label>
         <input id="image" name="image" type="file" autocomplete="image" required autofocus>
-    </section>
+    </section> -->
     <section>
-        <label for="img_id">Id</label>
-        <input id="img_id" name="img_id" type="text" autocomplete="img_id" required autofocus>
+        <label for="title">Id</label>
+        <input id="imgId" name="imgId" type="text" autocomplete="imgId" required autofocus>
     </section>
     <section>
         <label for="title">Title</label>
@@ -16,5 +16,5 @@
         <label for="description">Description</label>
         <input id="description" name="description" type="text" autocomplete="description" required>
     </section>
-    <button type="submit">Upload</button>
+    <button type="submit">Update</button>
 </form>

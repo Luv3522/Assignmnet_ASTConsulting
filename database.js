@@ -21,7 +21,8 @@
 // module.exports=db;
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
-const dbUrl = "mongodb+srv://20ucs107:lNWv3FQKZGXhzK8z@cluster0.qx0mtzf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+//smongodb+srv://20ucs107:lNWv3FQKZGXhzK8z@cluster0.qx0mtzf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+const dbUrl = "mongodb+srv://20ucs107:Rsl1Zupo3xLrKoVB@cluster0.co6cywr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 const connect = async () => {
  mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
  const db = mongoose.connection;

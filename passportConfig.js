@@ -1,68 +1,54 @@
-const LocalStrategy = require("passport-local").Strategy;
-const User = require("./models/users");
-module.exports = (passport) => {
- passport.use(
-   "local-signup",
-   new LocalStrategy(
-     {
-       usernameField: "username",
-       passwordField: "password",
-     },
-     async (username, password, done) => {
-       try {
-         // check if user exists
-         const userExists = await User.findOne({ "username": username });
-         if (userExists) {
-           return done(null, false)
-         }
-         // Create a new user with the user data provided
-         const user = await User.create({ username, password });
-         return done(null, user);
-       } catch (error) {
-         done(error);
-       }
-     }
-   )
- );
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
+const User = require("./models/users")
+const dotenv = require('dotenv')
+dotenv.config();
 
- passport.use(
-    "local-login",
-    new LocalStrategy(
-      {
-        usernameField: "email",
-        passwordField: "password",
-      },
-      async (email, password, done) => {
-        try {
-          const user = await User.findOne({ email: email });
-          if (!user) return done(null, false);
-          const isMatch = await user.matchPassword(password);
-          if (!isMatch)
-            return done(null, false);
-          // if passwords match return user
-          return done(null, user);
-        } catch (error) {
-          console.log(error)
-          return done(error, false);
-        }
-      }
-    )
-  );
-  passport.use(
-    new JwtStrategy(
-      {
-        jwtFromRequest: ExtractJwt.fromHeader("authorization"),
-        secretOrKey: "secretKey",
-      },
-      async (jwtPayload, done) => {
-        try {
-          // Extract user
-          const user = jwtPayload.user;
-          done(null, user);
-        } catch (error) {
-          done(error, false);
-        }
-      }
-    )
-  );
- };
+passport.serializeUser(function(user, done) {
+    /*
+    From the user take just the id (to minimize the cookie size) and just pass the id of the user
+    to the done callback
+    PS: You dont have to do it like this its just usually done like this
+    */
+    done(null, user);
+  });
+  
+passport.deserializeUser(function(user, done) {
+    /*
+    Instead of user this function usually recives the id 
+    then you use the id to select the user from the db and pass the user obj to the done callback
+    PS: You can later access this data in any routes in: req.user
+    */
+    done(null, user);
+});
+
+passport.use(new GoogleStrategy({
+    clientID:process.env.GOOGLE_CLIENT_ID,
+    clientSecret:process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL:'https://localhost:3000/google/callback',
+    passReqToCallback:true
+  },
+  async function(request, accessToken, refreshToken, profile, done) {
+    console.log(profile)
+    
+    const email = profile._json.email;
+
+    const list = new User({
+        
+        googleId:profile._json.email,
+        
+    });
+
+    const userExists = await User.findOne({email});
+    if(userExists){
+        console.log("user already exists");
+    }else{
+        list.save();
+    }
+
+    
+
+
+    return done(null, profile);
+  }
+));
